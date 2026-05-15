@@ -7,6 +7,23 @@ describe('usePhotoboothStore', () => {
       usePhotoboothStore.setState({
         photos: [],
         step: 'camera',
+        eventConfig: {
+          eventId: null,
+          eventName: 'Photobooth',
+          logoUrl: null,
+          themeLocked: false,
+        },
+        settings: {
+          countdownDuration: 3,
+          gridRows: 3,
+          gridGap: 'medium',
+          borderThickness: 'medium',
+          autoBurst: true,
+          stripLayout: 'vertical',
+          captureMode: 'strip',
+          kioskMode: false,
+          autoReviewOnFull: true,
+        },
         editState: {
           filter: 'none',
           brightness: 100,
@@ -48,9 +65,21 @@ describe('usePhotoboothStore', () => {
     const { updateSettings } = usePhotoboothStore.getState();
 
     act(() => {
-      updateSettings({ countdownDuration: 5 });
+      updateSettings({ countdownDuration: 5, autoBurst: false });
     });
 
     expect(usePhotoboothStore.getState().settings.countdownDuration).toBe(5);
+    expect(usePhotoboothStore.getState().settings.autoBurst).toBe(false);
+  });
+
+  it('should set photo at specific index', () => {
+    const { setPhotoAtIndex } = usePhotoboothStore.getState();
+
+    act(() => {
+      setPhotoAtIndex(2, 'slot-two');
+    });
+
+    const { photos } = usePhotoboothStore.getState();
+    expect(photos[2]).toBe('slot-two');
   });
 });

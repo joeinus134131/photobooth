@@ -26,7 +26,10 @@ export function FilterControls() {
               style={{ filter: preset.value === 'none' ? '' : preset.value }}
             >
                {/* Preview thumbnail - could be a sample image or just a color block */}
-               <div className="w-full h-full bg-[url('https://picsum.photos/seed/preview/100/100')] bg-cover"></div>
+               <div
+                 className="w-full h-full bg-cover bg-center"
+                 style={{ backgroundImage: "url('/images/filter-preview.svg')" }}
+               />
             </div>
             <span className="text-xs font-bold text-stone-600">{preset.name}</span>
           </button>

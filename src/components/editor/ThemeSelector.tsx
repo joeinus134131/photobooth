@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { Ghost, Sparkles, Palette, Zap } from 'lucide-react'
 
 export function ThemeSelector() {
-  const { editState, updateEditState } = usePhotoboothStore()
+  const { editState, updateEditState, eventConfig } = usePhotoboothStore()
 
   const themes = [
     { id: 'classic', name: 'Classic', icon: Palette, color: 'bg-stone-100 border-stone-300' },
@@ -24,8 +24,11 @@ export function ThemeSelector() {
           return (
             <button
               key={theme.id}
-              onClick={() => updateEditState({ stripTheme: theme.id })}
+              type="button"
+              disabled={eventConfig.themeLocked}
+              onClick={() => !eventConfig.themeLocked && updateEditState({ stripTheme: theme.id })}
               className={cn(
+                eventConfig.themeLocked && 'opacity-50 cursor-not-allowed',
                 "flex flex-col items-center justify-center p-2 rounded-lg border-2 transition-all",
                 theme.color,
                 isSelected 

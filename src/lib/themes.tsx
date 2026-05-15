@@ -24,7 +24,7 @@ export const THEMES = {
     border: 'border-[#8c7b6c]',
     text: 'text-[#8c7b6c]',
     decoration: (
-      <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/old-mathematics.png')] pointer-events-none z-20"></div>
+      <div className="absolute inset-0 opacity-40 pattern-retro-paper pointer-events-none z-20" />
     )
   },
   neon: {

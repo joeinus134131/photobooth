@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Chivo_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 
 const displayFont = Chivo_Mono({
   subsets: ["latin"],
@@ -16,6 +17,12 @@ const bodyFont = DM_Sans({
 export const metadata: Metadata = {
   title: "Photobooth App",
   description: "A retro-style photobooth experience in your browser.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Photobooth",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({
@@ -24,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-stone-100 font-sans antialiased",
@@ -33,6 +40,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
