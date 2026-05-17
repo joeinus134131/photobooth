@@ -3,6 +3,8 @@ import { Chivo_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Toaster } from "react-hot-toast";
 
 const displayFont = Chivo_Mono({
   subsets: ["latin"],
@@ -39,8 +41,24 @@ export default function RootLayout({
           bodyFont.variable
         )}
       >
-        {children}
-        <ServiceWorkerRegister />
+        <ErrorBoundary>
+          {children}
+          <ServiceWorkerRegister />
+          <Toaster 
+            position="top-right"
+            reverseOrder={false}
+            gutter={8}
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#1e293b',
+                color: '#e2e8f0',
+                border: '1px solid #475569',
+                borderRadius: '0.5rem',
+              },
+            }}
+          />
+        </ErrorBoundary>
       </body>
     </html>
   );
