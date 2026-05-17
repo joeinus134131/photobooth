@@ -11,4 +11,8 @@ export default withSentryConfig(nextConfig, {
   authToken: process.env.SENTRY_AUTH_TOKEN,
   silent: true, // Suppress Sentry CLI debug messages
   widenClientFileUpload: true,
+  // Disable source map uploads if SENTRY_AUTH_TOKEN is missing to avoid Vercel build crashes
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
 });
