@@ -98,27 +98,27 @@ export function ReviewPhase({ kioskMode }: ReviewPhaseProps) {
   }
 
   const btnClass = cn(
-    'flex-1 min-h-[48px] py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm border-2',
+    'flex-1 min-h-[44px] sm:min-h-[48px] py-2.5 sm:py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm border-2',
     kioskMode && 'min-h-[56px] text-base'
   )
 
   return (
-    <div className="flex flex-col h-full min-h-0 gap-4">
+    <div className="flex flex-col h-full min-h-0 gap-2 sm:gap-4 overflow-y-auto lg:overflow-hidden">
       <div className="text-center shrink-0">
-        <h2 className="font-display font-bold text-stone-800 text-lg uppercase tracking-wide">
+        <h2 className="font-display font-bold text-stone-800 text-base sm:text-lg uppercase tracking-wide">
           {isBoomerang ? 'Your Boomerang' : 'Review Your Strip'}
         </h2>
         {eventConfig.eventName && (
-          <p className="text-xs text-stone-500 mt-1">{eventConfig.eventName}</p>
+          <p className="text-[10px] sm:text-xs text-stone-500 mt-0.5 sm:mt-1">{eventConfig.eventName}</p>
         )}
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0 overflow-hidden">
-        <div className="flex-1 flex items-center justify-center min-h-0 overflow-auto print-area">
+      <div className="flex-1 flex flex-col lg:flex-row gap-3 sm:gap-4 min-h-0">
+        <div className="flex-1 flex items-center justify-center min-h-[180px] sm:min-h-0 overflow-auto print-area">
           <div
             className={cn(
               'relative shadow-xl',
-              kioskMode ? 'scale-90 lg:scale-100' : 'scale-[0.75] lg:scale-[0.85]'
+              kioskMode ? 'scale-75 sm:scale-90 lg:scale-100' : 'scale-[0.5] sm:scale-[0.65] lg:scale-[0.85]'
             )}
           >
             <PhotoStrip ref={stripRef} draggable={false} />
@@ -174,7 +174,7 @@ export function ReviewPhase({ kioskMode }: ReviewPhaseProps) {
           onClick={() => setStep('camera')}
           className={cn(btnClass, 'flex-1 bg-stone-200 text-stone-800 border-stone-400')}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           Edit more
         </button>
         <button
@@ -185,7 +185,7 @@ export function ReviewPhase({ kioskMode }: ReviewPhaseProps) {
           }}
           className={cn(btnClass, 'flex-1 bg-white text-stone-700 border-stone-300')}
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           New guest
         </button>
       </div>
