@@ -1,7 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Images } from 'lucide-react'
+import { GalleryModal } from './GalleryModal'
 
 interface RetroShellProps {
   children: React.ReactNode
@@ -16,6 +18,8 @@ export function RetroShell({
   kioskMode,
   eventName,
 }: RetroShellProps) {
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
+
   return (
     <main
       className={cn(
@@ -27,10 +31,17 @@ export function RetroShell({
       <div className="absolute inset-0 pattern-wood opacity-60 pointer-events-none" />
       <div className="w-full max-w-[98vw] sm:max-w-[95vw] h-full flex flex-col max-h-[99dvh] sm:max-h-[98vh] relative z-10">
         {!kioskMode && (
-          <header className="mb-1 sm:mb-2 text-center shrink-0">
+          <header className="mb-1 sm:mb-2 flex items-center justify-center relative shrink-0">
             <h1 className="text-lg sm:text-2xl md:text-3xl font-display font-bold text-stone-800 tracking-tighter uppercase drop-shadow-sm">
               {eventName || 'Photobooth'}
             </h1>
+            <button 
+              onClick={() => setIsGalleryOpen(true)}
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-stone-800 text-white p-2 rounded-lg hover:bg-stone-700 transition-colors shadow-sm"
+              title="Open Gallery"
+            >
+              <Images className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
           </header>
         )}
 
@@ -50,6 +61,8 @@ export function RetroShell({
           </footer>
         )}
       </div>
+
+      <GalleryModal isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
     </main>
   )
 }

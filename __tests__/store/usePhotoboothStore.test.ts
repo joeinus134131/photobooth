@@ -33,6 +33,7 @@ describe('usePhotoboothStore', () => {
           footerText: '',
           secretMessage: '',
           stripTheme: 'classic',
+          stickers: []
         },
       });
     });

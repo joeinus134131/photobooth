@@ -126,6 +126,15 @@ export const PhotoStrip = forwardRef<HTMLDivElement, PhotoStripProps>(
             >
               {editState.footerText}
             </div>
+
+            {/* Render Stickers */}
+            {editState.stickers?.map((sticker) => (
+              <DraggableSticker 
+                key={sticker.id} 
+                sticker={sticker} 
+                draggable={draggable} 
+              />
+            ))}
           </div>
 
           <div
@@ -176,3 +185,31 @@ export const PhotoStrip = forwardRef<HTMLDivElement, PhotoStripProps>(
 )
 
 PhotoStrip.displayName = 'PhotoStrip'
+
+function DraggableSticker({ sticker, draggable }: { sticker: any; draggable: boolean }) {
+  const nodeRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <Draggable
+      nodeRef={nodeRef}
+      defaultPosition={{ x: sticker.x, y: sticker.y }}
+      disabled={!draggable}
+      bounds="parent"
+      onStop={(e, data) => {
+        const state = usePhotoboothStore.getState()
+        const newStickers = state.editState.stickers.map((s: any) => 
+          s.id === sticker.id ? { ...s, x: data.x, y: data.y } : s
+        )
+        state.updateEditState({ stickers: newStickers })
+      }}
+    >
+      <div 
+        ref={nodeRef}
+        className={cn("absolute z-50 text-4xl select-none", draggable && "cursor-move hover:ring-2 hover:ring-red-400/50 rounded")}
+        style={{ transform: `rotate(${sticker.rotation}deg)` }}
+      >
+        {sticker.emoji}
+      </div>
+    </Draggable>
+  )
+}

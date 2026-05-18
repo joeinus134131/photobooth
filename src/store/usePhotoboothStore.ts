@@ -32,6 +32,15 @@ export interface TextOverlay {
   size: number
 }
 
+export interface StickerData {
+  id: string
+  emoji: string
+  x: number
+  y: number
+  scale: number
+  rotation: number
+}
+
 interface PhotoboothState {
   step: AppStep
   photos: Photo[]
@@ -50,7 +59,8 @@ interface PhotoboothState {
   editState: FilterSettings & {
     footerText: string
     secretMessage: string
-    stripTheme: 'classic' | 'halloween' | 'retro' | 'neon'
+    stripTheme: string
+    stickers: StickerData[]
   }
   
   // Actions
@@ -68,7 +78,7 @@ interface PhotoboothState {
 
 export type { PhotoboothState }
 
-const DEFAULT_EDIT_STATE: FilterSettings & { footerText: string; secretMessage: string; stripTheme: 'classic' } = {
+const DEFAULT_EDIT_STATE: FilterSettings & { footerText: string; secretMessage: string; stripTheme: string; stickers: StickerData[] } = {
   filter: 'none',
   brightness: 100,
   contrast: 100,
@@ -77,6 +87,7 @@ const DEFAULT_EDIT_STATE: FilterSettings & { footerText: string; secretMessage: 
   footerText: 'Photobooth App',
   secretMessage: 'Secret Message...',
   stripTheme: 'classic',
+  stickers: [],
 }
 
 export const usePhotoboothStore = create<PhotoboothState>((set) => ({

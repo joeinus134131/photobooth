@@ -22,14 +22,13 @@ export function FilterControls() {
             )}
           >
             <div 
-              className="w-full aspect-square rounded bg-stone-200 overflow-hidden"
-              style={{ filter: preset.value === 'none' ? '' : preset.value }}
+              className="w-full aspect-square rounded overflow-hidden relative"
             >
-               {/* Preview thumbnail - could be a sample image or just a color block */}
                <div
-                 className="w-full h-full bg-cover bg-center"
-                 style={{ backgroundImage: "url('/images/filter-preview.svg')" }}
+                 className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-500"
+                 style={{ filter: preset.value === 'none' ? '' : preset.value }}
                />
+               <div className="absolute inset-0 bg-white/10" />
             </div>
             <span className="text-xs font-bold text-stone-600">{preset.name}</span>
           </button>

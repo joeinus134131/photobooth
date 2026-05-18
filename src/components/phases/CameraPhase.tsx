@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FilterControls } from '@/components/editor/FilterControls'
 import { ColorGrading } from '@/components/editor/ColorGrading'
 import { TextControls } from '@/components/editor/TextControls'
+import { StickerControls } from '@/components/editor/StickerControls'
 import { SettingsControls } from '@/components/editor/SettingsControls'
 import { PhotoStrip } from '@/components/editor/PhotoStrip'
 import { ThemeSelector } from '@/components/editor/ThemeSelector'
@@ -45,6 +46,7 @@ export function CameraPhase({
   const [isCountingDown, setIsCountingDown] = useState(false)
   const [captureTargetSlot, setCaptureTargetSlot] = useState<number | null>(null)
   const [isBurstCapturing, setIsBurstCapturing] = useState(false)
+  const [showFlash, setShowFlash] = useState(false)
   const burstPendingRef = useRef(false)
   const photoStripRef = useRef<HTMLDivElement>(null)
 
@@ -62,6 +64,12 @@ export function CameraPhase({
     (slot: number): string | null => {
       if (!videoRef.current) return null
       playShutter()
+      if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(50)
+      }
+      setShowFlash(true)
+      setTimeout(() => setShowFlash(false), 150)
+      
       const filterStr = getFilterString(editState)
       const photoData = captureVideoFrame(videoRef.current, filterStr)
       if (photoData) {
@@ -196,6 +204,12 @@ export function CameraPhase({
                 isActive={isCountingDown}
                 onComplete={handleCountdownComplete}
               />
+              <div 
+                className={cn(
+                  "absolute inset-0 bg-white z-40 pointer-events-none transition-opacity duration-150",
+                  showFlash ? "opacity-100" : "opacity-0"
+                )} 
+              />
             </div>
           </div>
 
@@ -281,17 +295,20 @@ export function CameraPhase({
             showControls ? 'block' : 'hidden'
           )}>
             <Tabs defaultValue="filters" className="w-full flex-1 flex flex-col min-h-0">
-              <TabsList className="w-full bg-stone-300/50 p-1 mb-3 h-9 shrink-0 border border-stone-400/30 grid grid-cols-4">
-                <TabsTrigger value="filters" className="text-xs data-[state=active]:bg-stone-100">
+              <TabsList className="w-full bg-stone-300/50 p-1 mb-3 h-9 shrink-0 border border-stone-400/30 grid grid-cols-5">
+                <TabsTrigger value="filters" className="text-[10px] sm:text-xs data-[state=active]:bg-stone-100 px-1">
                   Filters
                 </TabsTrigger>
-                <TabsTrigger value="color" className="text-xs data-[state=active]:bg-stone-100">
+                <TabsTrigger value="color" className="text-[10px] sm:text-xs data-[state=active]:bg-stone-100 px-1">
                   Color
                 </TabsTrigger>
-                <TabsTrigger value="text" className="text-xs data-[state=active]:bg-stone-100">
+                <TabsTrigger value="stickers" className="text-[10px] sm:text-xs data-[state=active]:bg-stone-100 px-1">
+                  Stickers
+                </TabsTrigger>
+                <TabsTrigger value="text" className="text-[10px] sm:text-xs data-[state=active]:bg-stone-100 px-1">
                   Text
                 </TabsTrigger>
-                <TabsTrigger value="setup" className="text-xs data-[state=active]:bg-stone-100">
+                <TabsTrigger value="setup" className="text-[10px] sm:text-xs data-[state=active]:bg-stone-100 px-1">
                   Setup
                 </TabsTrigger>
               </TabsList>
@@ -301,6 +318,9 @@ export function CameraPhase({
                 </TabsContent>
                 <TabsContent value="color" className="mt-0">
                   <ColorGrading />
+                </TabsContent>
+                <TabsContent value="stickers" className="mt-0">
+                  <StickerControls />
                 </TabsContent>
                 <TabsContent value="text" className="mt-0">
                   <TextControls />

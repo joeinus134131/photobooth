@@ -16,6 +16,8 @@ import { shareStripImage, renderStripToDataUrl } from '@/lib/share-utils'
 import { printPhotoStrip } from '@/lib/print-utils'
 import { framesToGif, downloadBlob } from '@/lib/gif-utils'
 import { cn } from '@/lib/utils'
+import { useGallery } from '@/hooks/useGallery'
+import confetti from 'canvas-confetti'
 
 interface ReviewPhaseProps {
   kioskMode?: boolean
@@ -46,17 +48,51 @@ export function ReviewPhase({ kioskMode }: ReviewPhaseProps) {
     return () => clearTimeout(t)
   }, [refreshPreview, photos, settings.stripLayout])
 
+  useEffect(() => {
+    // Fire confetti when arriving at review phase
+    const duration = 2000;
+    const end = Date.now() + duration;
+
+    const frame = () => {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: ['#ff0000', '#00ff00', '#0000ff']
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: ['#ff0000', '#00ff00', '#0000ff']
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    };
+    frame();
+  }, []);
+
+  const { saveToGallery } = useGallery()
+
   const handleDownload = async () => {
     if (!stripRef.current) return
     setBusy('download')
     try {
+      if (stripDataUrl) {
+        await saveToGallery(stripDataUrl)
+      }
+      
       if (isBoomerang && filledFrames.length > 0) {
         const gif = await framesToGif(filledFrames)
         downloadBlob(gif, `photobooth-boomerang-${Date.now()}.gif`)
-        setMessage('GIF downloaded')
+        setMessage('GIF saved to gallery & downloaded')
       } else {
         await downloadPhotoStrip(stripRef.current, 'png', `photobooth-${Date.now()}`)
-        setMessage('Strip downloaded')
+        setMessage('Strip saved to gallery & downloaded')
       }
     } catch {
       setMessage('Download failed')
@@ -136,7 +172,7 @@ export function ReviewPhase({ kioskMode }: ReviewPhaseProps) {
               className={cn(btnClass, 'bg-stone-800 text-white border-stone-900 col-span-2')}
             >
               <Share2 className="w-4 h-4" />
-              {busy === 'share' ? 'Sharing...' : 'Share'}
+              {busy === 'share' ? 'Sharing...' : 'Share to IG / TikTok'}
             </button>
             <button
               type="button"
